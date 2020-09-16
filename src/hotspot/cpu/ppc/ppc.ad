@@ -2165,12 +2165,6 @@ const int Matcher::float_pressure(int default_pressure_threshold) {
   return default_pressure_threshold;
 }
 
-int Matcher::regnum_to_fpu_offset(int regnum) {
-  // No user for this method?
-  Unimplemented();
-  return 999;
-}
-
 const bool Matcher::convL2FSupported(void) {
   // fcfids can do the conversion (>= Power7).
   // fcfid + frsp showed rounding problem when result should be 0x3f800001.
@@ -3605,7 +3599,6 @@ encode %{
     call->_tf                = _tf;
     call->_entry_point       = _entry_point;
     call->_cnt               = _cnt;
-    call->_argsize           = _argsize;
     call->_oop_map           = _oop_map;
     call->_jvms              = _jvms;
     call->_jvmadj            = _jvmadj;
@@ -3806,7 +3799,6 @@ encode %{
     call->_tf          = _tf;
     call->_entry_point = _entry_point;
     call->_cnt         = _cnt;
-    call->_argsize     = _argsize;
     call->_oop_map     = _oop_map;
     guarantee(!_jvms, "You must clone the jvms and adapt the offsets by fix_jvms().");
     call->_jvms        = NULL;
