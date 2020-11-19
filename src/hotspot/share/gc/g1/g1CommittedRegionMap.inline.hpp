@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 1997, 2020, Oracle and/or its affiliates. All rights reserved.
- * Copyright 2007, 2008, 2010, 2011 Red Hat, Inc.
+ * Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,23 +22,18 @@
  *
  */
 
-#ifndef CPU_ZERO_CPPINTERPRETER_ZERO_HPP
-#define CPU_ZERO_CPPINTERPRETER_ZERO_HPP
+#ifndef SHARE_GC_G1_G1COMMITTEDREGIONMAP_INLINE_HPP
+#define SHARE_GC_G1_G1COMMITTEDREGIONMAP_INLINE_HPP
 
- protected:
-  // Size of interpreter code
-  const static int InterpreterCodeSize = 6 * K;
+#include "gc/g1/g1CommittedRegionMap.hpp"
+#include "utilities/bitMap.inline.hpp"
 
- public:
-  // Method entries
-  static int normal_entry(Method* method, intptr_t UNUSED, TRAPS);
-  static int native_entry(Method* method, intptr_t UNUSED, TRAPS);
-  static int getter_entry(Method* method, intptr_t UNUSED, TRAPS);
-  static int setter_entry(Method* method, intptr_t UNUSED, TRAPS);
-  static int empty_entry(Method* method, intptr_t UNUSED, TRAPS);
+inline bool G1CommittedRegionMap::active(uint index) const {
+  return _active.at(index);
+}
 
- public:
-  // Main loop of normal_entry
-  static void main_loop(int recurse, TRAPS);
+inline bool G1CommittedRegionMap::inactive(uint index) const {
+  return _inactive.at(index);
+}
 
-#endif // CPU_ZERO_CPPINTERPRETER_ZERO_HPP
+#endif // SHARE_GC_G1_G1COMMITTEDREGIONMAP_INLINE_HPP
