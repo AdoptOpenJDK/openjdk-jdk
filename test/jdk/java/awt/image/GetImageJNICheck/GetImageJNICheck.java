@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, 2021, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -21,33 +21,22 @@
  * questions.
  */
 
-#include "precompiled.hpp"
-#include "gc/shared/gc_globals.hpp"
-#include "gc/z/zAddressSpaceLimit.hpp"
-#include "gc/z/zGlobals.hpp"
-#include "runtime/globals.hpp"
-#include "runtime/os.hpp"
-#include "utilities/align.hpp"
+import java.awt.Component;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Toolkit;
 
-static size_t address_space_limit() {
-  size_t limit = 0;
+public class GetImageJNICheck extends Component {
 
-  if (os::has_allocatable_memory_limit(&limit)) {
-    return limit;
-  }
-
-  // No limit
-  return SIZE_MAX;
-}
-
-size_t ZAddressSpaceLimit::mark_stack() {
-  // Allow mark stacks to occupy 10% of the address space
-  const size_t limit = address_space_limit() / 10;
-  return align_up(limit, ZMarkStackSpaceExpandSize);
-}
-
-size_t ZAddressSpaceLimit::heap_view() {
-  // Allow all heap views to occupy 50% of the address space
-  const size_t limit = address_space_limit() / MaxVirtMemFraction / ZHeapViews;
-  return align_up(limit, ZGranuleSize);
+     public static void main(String[] args) throws Exception {
+        System.setProperty("java.awt.headless", "true");
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        String testPath = System.getProperty("test.src", ".");
+        String imgFile = testPath + java.io.File.separator + "duke.jpg";
+        Image image = tk.getImage(imgFile);
+        MediaTracker mt = new MediaTracker(new GetImageJNICheck() );
+        mt.addImage(image, 0);
+        mt.waitForAll();
+        System.exit(0);
+     }
 }
