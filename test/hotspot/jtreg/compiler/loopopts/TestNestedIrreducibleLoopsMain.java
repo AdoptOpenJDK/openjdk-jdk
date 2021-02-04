@@ -1,12 +1,10 @@
 /*
- * Copyright (c) 2011, 2012, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
+ * published by the Free Software Foundation.
  *
  * This code is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
@@ -23,5 +21,25 @@
  * questions.
  */
 
-#import <Cocoa/Cocoa.h>
-#import <Carbon/Carbon.h>
+/*
+ * @test
+ * @bug 8253353
+ * @summary Tests custom bytecode with deep nested irreducible loops.
+ *
+ * @compile TestNestedIrreducibleLoops.jasm
+ * @run main/othervm -Xbatch -XX:CompileCommand=dontinline,TestNestedIrreducibleLoops::*
+ *                   -XX:CompileCommand=exclude,TestNestedIrreducibleLoopsMain::main
+ *                   TestNestedIrreducibleLoopsMain
+ */
+
+public class TestNestedIrreducibleLoopsMain {
+    public static void main(String[] args) {
+        TestNestedIrreducibleLoops t = new TestNestedIrreducibleLoops();
+        t.loopCounter = 3;
+        int j;
+        for (int i = 0; i < 11000; i++) {
+            t.start = i & 0x3ff;
+            j = t.test(); // Produces deep nested irreducible loops
+        }
+    }
+}
