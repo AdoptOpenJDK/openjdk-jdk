@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021, Red Hat, Inc. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -21,27 +21,40 @@
  * questions.
  */
 
-import static java.lang.ProcessBuilder.Redirect.*;
+/**
+ * @test
+ * @bug 8260709
+ * @summary C2: assert(false) failed: unscheduable graph
+ *
+ * @run main/othervm -XX:-BackgroundCompilation TestLoadPinnedAfterAllocate
+ *
+ */
 
-class InheritIO {
+public class TestLoadPinnedAfterAllocate {
+    private int field;
+    private static volatile int barrier;
+    private static Object field2;
 
-    public static class TestInheritIO {
-        public static void main(String args[]) throws Throwable {
-            int err = new ProcessBuilder(args).inheritIO().start().waitFor();
-            System.err.print("exit value: " + err);
-            System.exit(err);
+    public static void main(String[] args) {
+        final TestLoadPinnedAfterAllocate test = new TestLoadPinnedAfterAllocate();
+        for (int i = 0; i < 20_000; i++) {
+            test.test(1, 10);
         }
     }
 
-    public static class TestRedirectInherit {
-        public static void main(String args[]) throws Throwable {
-            int err = new ProcessBuilder(args)
-                    .redirectInput(INHERIT)
-                    .redirectOutput(INHERIT)
-                    .redirectError(INHERIT)
-                    .start().waitFor();
-            System.err.print("exit value: " + err);
-            System.exit(err);
+    private int test(int start, int stop) {
+        int[] array = new int[10];
+        for (int j = 0; j < 10; j++) {
+            barrier = 1;
+            // early control for field load below
+            for (int i = 1; i < 10; i *= 2) {
+                field2 = array;
+                array = new int[10];
+                // late control for field load below
+            }
         }
+        int v = field;
+        array[0] = v;
+        return v+v;
     }
 }
