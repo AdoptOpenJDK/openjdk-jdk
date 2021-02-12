@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -19,20 +19,15 @@
  * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
  * or visit www.oracle.com if you need additional information or have any
  * questions.
- *
  */
 
-#ifndef SHARE_GC_SHARED_CARDTABLEBARRIERSET_INLINE_HPP
-#define SHARE_GC_SHARED_CARDTABLEBARRIERSET_INLINE_HPP
+package pkg1;
 
-#include "gc/shared/cardTableBarrierSet.hpp"
-#include "gc/shared/cardTable.hpp"
-#include "runtime/atomic.hpp"
+import pkg2.UndocumentedParent;
 
-template <DecoratorSet decorators, typename T>
-inline void CardTableBarrierSet::write_ref_field_post(T* field, oop newVal) {
-  volatile CardValue* byte = _card_table->byte_for(field);
-  *byte = CardTable::dirty_card_val();
+/**
+ * A visible class, extending invisible classes.
+ */
+public class Child extends UndocumentedParent<Child> {
+
 }
-
-#endif // SHARE_GC_SHARED_CARDTABLEBARRIERSET_INLINE_HPP
