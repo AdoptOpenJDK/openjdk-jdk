@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2021, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -19,34 +19,19 @@
  * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
  * or visit www.oracle.com if you need additional information or have any
  * questions.
- *
  */
 
-#ifndef SHARE_GC_G1_G1FULLGCADJUSTTASK_HPP
-#define SHARE_GC_G1_G1FULLGCADJUSTTASK_HPP
+/**
+ * This is class B in the unnamed package.
+ */
+public class B {
+    public A a;
 
-#include "gc/g1/g1FullGCOopClosures.hpp"
-#include "gc/g1/g1FullGCTask.hpp"
-#include "gc/g1/g1RootProcessor.hpp"
-#include "gc/g1/g1StringDedup.hpp"
-#include "gc/g1/heapRegionManager.hpp"
-#include "gc/shared/parallelCleaning.hpp"
-#include "gc/shared/weakProcessor.hpp"
-#include "utilities/ticks.hpp"
+    public B(A a) {
+        this.a = a;
+    }
 
-class G1CollectedHeap;
-
-class G1FullGCAdjustTask : public G1FullGCTask {
-  G1RootProcessor          _root_processor;
-  volatile bool            _references_done;
-  WeakProcessor::Task      _weak_proc_task;
-  HeapRegionClaimer        _hrclaimer;
-  G1AdjustClosure          _adjust;
-  StringDedupCleaningTask  _string_dedup_cleaning_task;
-
-public:
-  G1FullGCAdjustTask(G1FullCollector* collector);
-  void work(uint worker_id);
-};
-
-#endif // SHARE_GC_G1_G1FULLGCADJUSTTASK_HPP
+    public A a() {
+        return a;
+    }
+}
